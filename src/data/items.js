@@ -1,3 +1,5 @@
+const publicAsset = (path) => `${import.meta.env.BASE_URL}${path}`;
+
 export const items = [
   {
     id: 'pixel-bunny-sticker',
@@ -7,7 +9,7 @@ export const items = [
     weight: 15,
     series: 'Arcade Pets',
     description: 'A bright bunny sticker with tiny pixel cheeks.',
-    image: '/items/pixel-bunny-sticker.svg',
+    image: publicAsset('items/pixel-bunny-sticker.svg'),
     color: '#ff7a90',
   },
   {
@@ -18,7 +20,7 @@ export const items = [
     weight: 15,
     series: 'Arcade Pets',
     description: 'A fizzy pup charm wearing a soda-cap hat.',
-    image: '/items/soda-pup-charm.svg',
+    image: publicAsset('items/soda-pup-charm.svg'),
     color: '#45c7d4',
   },
   {
@@ -29,7 +31,7 @@ export const items = [
     weight: 15,
     series: 'Arcade Pets',
     description: 'A sleepy fox figure curled into a soft cloud.',
-    image: '/items/cloud-fox-mini.svg',
+    image: publicAsset('items/cloud-fox-mini.svg'),
     color: '#f6b85f',
   },
   {
@@ -40,7 +42,7 @@ export const items = [
     weight: 15,
     series: 'Arcade Pets',
     description: 'A penguin badge with a glow-cabinet outline.',
-    image: '/items/neon-penguin-badge.svg',
+    image: publicAsset('items/neon-penguin-badge.svg'),
     color: '#6a8dff',
   },
   {
@@ -51,7 +53,7 @@ export const items = [
     weight: 6,
     series: 'Fruit Cabinet',
     description: 'A round hamster token with melon stripes.',
-    image: '/items/melon-hamster-token.svg',
+    image: publicAsset('items/melon-hamster-token.svg'),
     color: '#7bd66f',
   },
   {
@@ -62,7 +64,7 @@ export const items = [
     weight: 6,
     series: 'Arcade Pets',
     description: 'A tiny cat pin shaped like a mixtape.',
-    image: '/items/cassette-kitty-pin.svg',
+    image: publicAsset('items/cassette-kitty-pin.svg'),
     color: '#ff9f45',
   },
   {
@@ -73,7 +75,7 @@ export const items = [
     weight: 6,
     series: 'Snack Parade',
     description: 'A bear mascot bobbing inside a tea cup.',
-    image: '/items/bubble-tea-bear.svg',
+    image: publicAsset('items/bubble-tea-bear.svg'),
     color: '#c58dff',
   },
   {
@@ -84,7 +86,7 @@ export const items = [
     weight: 6,
     series: 'Arcade Pets',
     description: 'A pocket robot with a rainbow signal light.',
-    image: '/items/rainbow-robot-mascot.svg',
+    image: publicAsset('items/rainbow-robot-mascot.svg'),
     color: '#55d6a7',
   },
   {
@@ -95,7 +97,7 @@ export const items = [
     weight: 5,
     series: 'Arcade Pets',
     description: 'A glittery cat charm clipped to a golden star.',
-    image: '/items/star-cat-keychain.svg',
+    image: publicAsset('items/star-cat-keychain.svg'),
     color: '#ffd45a',
   },
   {
@@ -106,7 +108,7 @@ export const items = [
     weight: 5,
     series: 'Night Cabinet',
     description: 'A tiny hamster napping in a crescent moon.',
-    image: '/items/moon-hamster-figure.svg',
+    image: publicAsset('items/moon-hamster-figure.svg'),
     color: '#8fa4ff',
   },
   {
@@ -117,7 +119,7 @@ export const items = [
     weight: 4,
     series: 'Prize Cabinet',
     description: 'A coiled dragon guarding a translucent capsule.',
-    image: '/items/lucky-dragon-capsule.svg',
+    image: publicAsset('items/lucky-dragon-capsule.svg'),
     color: '#ff6f61',
   },
   {
@@ -128,7 +130,7 @@ export const items = [
     weight: 1,
     series: 'Prize Cabinet',
     description: 'The tiny guardian of perfect arcade pulls.',
-    image: '/items/golden-joystick-guardian.svg',
+    image: publicAsset('items/golden-joystick-guardian.svg'),
     color: '#f4bd38',
   },
 ];

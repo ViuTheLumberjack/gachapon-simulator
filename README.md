@@ -192,6 +192,16 @@ npm test
 
 The dev server uses Vite and binds to `0.0.0.0` so it can be opened from the local workspace URL shown in the terminal.
 
+## Demo Deployment
+
+The public demo is intended to run on GitHub Pages at:
+
+```text
+https://viuthelumberjack.github.io/gachapon-simulator/
+```
+
+Deployment is handled by GitHub Actions.
+
 ## Content Guidelines
 
 Item names should be short and readable. Flavor text should be playful but brief. Rarity should feel special, but every prize should still feel intentionally designed.
