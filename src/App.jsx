@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import CapsuleReveal from './components/CapsuleReveal.jsx';
 import CollectionGrid from './components/CollectionGrid.jsx';
 import GachaponMachine from './components/GachaponMachine.jsx';
+import PostDrawRevealOverlay from './components/PostDrawRevealOverlay.jsx';
 import StatsPanel from './components/StatsPanel.jsx';
 import TruthOrDareMode from './components/TruthOrDareMode.jsx';
 import { items } from './data/items.js';
@@ -19,12 +20,22 @@ export default function App() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [latestResult, setLatestResult] = useState(null);
   const [dropColor, setDropColor] = useState(null);
+  const [postDrawReveal, setPostDrawReveal] = useState(null);
+  const drawTimeoutRef = useRef(null);
   const { collection, stats, collectionSummary, addItem, resetCollection } =
     useCollection(machineItems);
   const odds = useMemo(() => summarizeRarityOdds(machineItems), []);
 
+  useEffect(() => {
+    return () => {
+      if (drawTimeoutRef.current) {
+        window.clearTimeout(drawTimeoutRef.current);
+      }
+    };
+  }, []);
+
   function drawCapsule() {
-    if (isDrawing) {
+    if (isDrawing || postDrawReveal) {
       return;
     }
 
@@ -36,15 +47,32 @@ export default function App() {
     const delay = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       ? 100
       : DRAW_ANIMATION_MS;
-    window.setTimeout(() => {
+    drawTimeoutRef.current = window.setTimeout(() => {
       const duplicate = addItem(item);
-      setLatestResult({
+      setPostDrawReveal({
+        kind: 'item',
         item,
         duplicate,
       });
       setIsDrawing(false);
       setDropColor(null);
+      drawTimeoutRef.current = null;
     }, delay);
+  }
+
+  function dismissPostDrawReveal() {
+    if (!postDrawReveal) {
+      return;
+    }
+
+    if (postDrawReveal.kind === 'item') {
+      setLatestResult({
+        item: postDrawReveal.item,
+        duplicate: postDrawReveal.duplicate,
+      });
+    }
+
+    setPostDrawReveal(null);
   }
 
   return (
@@ -80,6 +108,7 @@ export default function App() {
               machine={activeMachine}
               items={machineItems}
               isDrawing={isDrawing}
+              isDrawDisabled={isDrawing || Boolean(postDrawReveal)}
               onDraw={drawCapsule}
               odds={odds}
               dropColor={dropColor}
@@ -102,6 +131,12 @@ export default function App() {
           <TruthOrDareMode />
         </main>
       )}
+      {postDrawReveal ? (
+        <PostDrawRevealOverlay
+          reveal={postDrawReveal}
+          onDismiss={dismissPostDrawReveal}
+        />
+      ) : null}
     </div>
   );
 }

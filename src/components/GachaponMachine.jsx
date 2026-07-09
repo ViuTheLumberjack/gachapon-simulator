@@ -5,6 +5,7 @@ export default function GachaponMachine({
   machine,
   items,
   isDrawing,
+  isDrawDisabled = isDrawing,
   onDraw,
   odds,
   dropColor,
@@ -38,7 +39,11 @@ export default function GachaponMachine({
           </p>
         </div>
 
-        <DrawControls isDrawing={isDrawing} onDraw={onDraw} />
+        <DrawControls
+          isDrawing={isDrawing}
+          isDisabled={isDrawDisabled}
+          onDraw={onDraw}
+        />
       </div>
 
       <aside className="odds-panel" aria-label="Rarity odds">

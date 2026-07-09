@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { drawTruthOrDare } from '../lib/drawPrompt.js';
+import PostDrawRevealOverlay from './PostDrawRevealOverlay.jsx';
 import PromptDeckUploader from './PromptDeckUploader.jsx';
 import PromptReveal from './PromptReveal.jsx';
 import TruthOrDareMachine from './TruthOrDareMachine.jsx';
@@ -52,6 +53,7 @@ export default function TruthOrDareMode() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [dropColor, setDropColor] = useState(null);
+  const [postDrawReveal, setPostDrawReveal] = useState(null);
   const drawTimeoutRef = useRef(null);
 
   const hasTruths = deck.truths.length > 0;
@@ -74,6 +76,7 @@ export default function TruthOrDareMode() {
 
     setIsDrawing(false);
     setDropColor(null);
+    setPostDrawReveal(null);
   }
 
   function updateDeck(nextDeck) {
@@ -104,7 +107,7 @@ export default function TruthOrDareMode() {
   }
 
   function draw(choice) {
-    if (isDrawing || !isReady) {
+    if (isDrawing || postDrawReveal || !isReady) {
       return;
     }
 
@@ -120,7 +123,12 @@ export default function TruthOrDareMode() {
         ? 80
         : DRAW_ANIMATION_MS;
       drawTimeoutRef.current = window.setTimeout(() => {
-        setResult(nextResult);
+        setPostDrawReveal({
+          kind: 'prompt',
+          type: nextResult.type,
+          prompt: nextResult.prompt,
+          color: PROMPT_DROP_COLORS[nextResult.type],
+        });
         setIsDrawing(false);
         setDropColor(null);
         drawTimeoutRef.current = null;
@@ -128,6 +136,21 @@ export default function TruthOrDareMode() {
     } catch (drawError) {
       setError(drawError.message);
     }
+  }
+
+  function dismissPostDrawReveal() {
+    if (!postDrawReveal) {
+      return;
+    }
+
+    if (postDrawReveal.kind === 'prompt') {
+      setResult({
+        type: postDrawReveal.type,
+        prompt: postDrawReveal.prompt,
+      });
+    }
+
+    setPostDrawReveal(null);
   }
 
   return (
@@ -168,7 +191,7 @@ export default function TruthOrDareMode() {
                   className="primary-button"
                   type="button"
                   onClick={() => draw('surprise')}
-                  disabled={!hasAnyPrompt || isDrawing}
+                  disabled={!hasAnyPrompt || isDrawing || Boolean(postDrawReveal)}
                 >
                   Surprise Me
                 </button>
@@ -218,6 +241,12 @@ export default function TruthOrDareMode() {
       </div>
 
       {isReady ? <PromptReveal result={result} /> : null}
+      {postDrawReveal ? (
+        <PostDrawRevealOverlay
+          reveal={postDrawReveal}
+          onDismiss={dismissPostDrawReveal}
+        />
+      ) : null}
     </div>
   );
 }
