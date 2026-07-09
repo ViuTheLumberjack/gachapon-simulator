@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title>Moon Hamster Figure</title>
+  <rect width="160" height="160" rx="18" fill="#eef2ff"/>
+  <path d="M106 24c-34 8-58 38-58 72 0 20 11 34 30 34 22 0 42-18 50-44-10 10-24 14-38 10-18-5-27-20-22-38 5-16 19-28 38-34z" fill="#8fa4ff" stroke="#17212f" stroke-width="8" stroke-linejoin="round"/>
+  <circle cx="76" cy="88" r="28" fill="#ffffff" stroke="#17212f" stroke-width="7"/>
+  <circle cx="66" cy="84" r="5" fill="#17212f"/>
+  <circle cx="86" cy="84" r="5" fill="#17212f"/>
+  <path d="M72 98h8" stroke="#17212f" stroke-width="5" stroke-linecap="round"/>
+</svg>

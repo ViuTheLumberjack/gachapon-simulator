@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title>Golden Joystick Guardian</title>
+  <rect width="160" height="160" rx="18" fill="#fff8df"/>
+  <rect x="34" y="88" width="92" height="42" rx="14" fill="#f4bd38" stroke="#17212f" stroke-width="8"/>
+  <path d="M80 88V42" stroke="#17212f" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="80" cy="36" r="18" fill="#ffd45a" stroke="#17212f" stroke-width="8"/>
+  <circle cx="56" cy="108" r="7" fill="#17212f"/>
+  <circle cx="104" cy="108" r="7" fill="#17212f"/>
+  <path d="M70 120h20" stroke="#17212f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M40 72 24 60M120 72l16-12M52 42 38 24M108 42l14-18" stroke="#f4bd38" stroke-width="8" stroke-linecap="round"/>
+</svg>

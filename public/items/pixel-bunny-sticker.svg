@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title>Pixel Bunny Sticker</title>
+  <rect width="160" height="160" rx="18" fill="#fff8df"/>
+  <path d="M48 64V28h22v36M90 64V28h22v36" fill="#ffb9c6" stroke="#17212f" stroke-width="8" stroke-linejoin="round"/>
+  <rect x="34" y="58" width="92" height="72" rx="28" fill="#ffffff" stroke="#17212f" stroke-width="8"/>
+  <rect x="56" y="86" width="10" height="10" fill="#17212f"/>
+  <rect x="94" y="86" width="10" height="10" fill="#17212f"/>
+  <path d="M72 106h16" stroke="#17212f" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="48" cy="102" r="8" fill="#ff7a90"/>
+  <circle cx="112" cy="102" r="8" fill="#ff7a90"/>
+</svg>

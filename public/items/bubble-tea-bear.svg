@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title>Bubble Tea Bear</title>
+  <rect width="160" height="160" rx="18" fill="#f6edff"/>
+  <rect x="42" y="42" width="76" height="98" rx="20" fill="#c58dff" stroke="#17212f" stroke-width="8"/>
+  <path d="M54 42h52l-8-20H62z" fill="#ffffff" stroke="#17212f" stroke-width="7" stroke-linejoin="round"/>
+  <circle cx="62" cy="88" r="7" fill="#17212f"/>
+  <circle cx="98" cy="88" r="7" fill="#17212f"/>
+  <path d="M72 104c5 5 11 5 16 0" fill="none" stroke="#17212f" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="64" cy="124" r="7" fill="#17212f"/>
+  <circle cx="82" cy="128" r="7" fill="#17212f"/>
+  <circle cx="100" cy="124" r="7" fill="#17212f"/>
+</svg>

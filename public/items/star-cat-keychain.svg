@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title>Star Cat Keychain</title>
+  <rect width="160" height="160" rx="18" fill="#fff8df"/>
+  <path d="m80 20 14 34 36 3-28 23 9 36-31-19-31 19 9-36-28-23 36-3z" fill="#ffd45a" stroke="#17212f" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M56 74 66 58l10 16M84 74l10-16 10 16" fill="#ffffff" stroke="#17212f" stroke-width="6" stroke-linejoin="round"/>
+  <circle cx="66" cy="78" r="6" fill="#17212f"/>
+  <circle cx="94" cy="78" r="6" fill="#17212f"/>
+  <path d="M74 92h12" stroke="#17212f" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="80" cy="132" r="14" fill="#ffffff" stroke="#17212f" stroke-width="7"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title>Lucky Dragon Capsule</title>
+  <rect width="160" height="160" rx="18" fill="#fff0ed"/>
+  <path d="M44 96c4-34 40-52 68-34 22 14 18 48-10 56-22 6-44-8-36-28 5-12 23-12 30-2" fill="none" stroke="#ff6f61" stroke-width="18" stroke-linecap="round"/>
+  <path d="M104 54 128 38l-6 28" fill="#ffd45a" stroke="#17212f" stroke-width="7" stroke-linejoin="round"/>
+  <circle cx="104" cy="60" r="18" fill="#ff6f61" stroke="#17212f" stroke-width="7"/>
+  <circle cx="110" cy="56" r="4" fill="#17212f"/>
+  <path d="M92 72h20" stroke="#17212f" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="76" cy="112" r="22" fill="#ffffff" stroke="#17212f" stroke-width="7"/>
+</svg>

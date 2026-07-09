@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title>Melon Hamster Token</title>
+  <rect width="160" height="160" rx="18" fill="#edffe8"/>
+  <circle cx="80" cy="82" r="56" fill="#7bd66f" stroke="#17212f" stroke-width="8"/>
+  <path d="M45 62c20-14 50-14 70 0M38 86c28-10 56-10 84 0M50 110c20 8 40 8 60 0" fill="none" stroke="#398d45" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="60" cy="80" r="7" fill="#17212f"/>
+  <circle cx="100" cy="80" r="7" fill="#17212f"/>
+  <path d="M72 98h16" stroke="#17212f" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="80" cy="26" r="14" fill="#ffffff" stroke="#17212f" stroke-width="7"/>
+</svg>

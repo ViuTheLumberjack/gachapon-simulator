@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title>Rainbow Robot Mascot</title>
+  <rect width="160" height="160" rx="18" fill="#eafff6"/>
+  <rect x="38" y="52" width="84" height="72" rx="16" fill="#55d6a7" stroke="#17212f" stroke-width="8"/>
+  <path d="M80 52V28M64 28h32" stroke="#17212f" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="62" cy="84" r="8" fill="#17212f"/>
+  <circle cx="98" cy="84" r="8" fill="#17212f"/>
+  <path d="M64 104h32" stroke="#17212f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M42 130h76" stroke="#ff6f61" stroke-width="7" stroke-linecap="round"/>
+  <path d="M50 142h60" stroke="#f4bd38" stroke-width="7" stroke-linecap="round"/>
+</svg>

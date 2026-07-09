@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title>Neon Penguin Badge</title>
+  <rect width="160" height="160" rx="18" fill="#eef2ff"/>
+  <circle cx="80" cy="80" r="58" fill="#6a8dff" stroke="#17212f" stroke-width="8"/>
+  <ellipse cx="80" cy="88" rx="34" ry="42" fill="#ffffff" stroke="#17212f" stroke-width="7"/>
+  <circle cx="64" cy="70" r="7" fill="#17212f"/>
+  <circle cx="96" cy="70" r="7" fill="#17212f"/>
+  <path d="M72 88h16l-8 10z" fill="#f4bd38" stroke="#17212f" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M48 122h24M88 122h24" stroke="#17212f" stroke-width="7" stroke-linecap="round"/>
+</svg>

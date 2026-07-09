@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title>Cloud Fox Mini</title>
+  <rect width="160" height="160" rx="18" fill="#fff8df"/>
+  <path d="M46 68 34 34l34 20M114 68l12-34-34 20" fill="#f6b85f" stroke="#17212f" stroke-width="8" stroke-linejoin="round"/>
+  <rect x="34" y="54" width="92" height="70" rx="28" fill="#f6b85f" stroke="#17212f" stroke-width="8"/>
+  <path d="M50 118c4-18 22-26 30-10 8-16 30-8 30 10 0 14-16 20-30 20s-30-6-30-20z" fill="#ffffff" stroke="#17212f" stroke-width="7"/>
+  <circle cx="62" cy="84" r="7" fill="#17212f"/>
+  <circle cx="98" cy="84" r="7" fill="#17212f"/>
+  <path d="M75 99h10" stroke="#17212f" stroke-width="6" stroke-linecap="round"/>
+</svg>
