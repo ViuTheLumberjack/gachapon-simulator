@@ -1,50 +1,53 @@
 import CapsuleGlobe from './CapsuleGlobe.jsx';
+import { getPromptCapsuleColor } from '../lib/drawPrompt.js';
 
-const PROMPT_CAPSULE_COUNT = 6;
-const PROMPT_CAPSULE_COLORS = {
-  truth: 'var(--blue)',
-  dare: 'var(--coral)',
-};
+function buildPromptCapsules(truths, dares) {
+  const capsules = [];
+  const largestCategory = Math.max(truths.length, dares.length);
 
-function buildPromptCapsules(hasTruths, hasDares) {
-  if (!hasTruths && !hasDares) {
-    return [];
+  for (let index = 0; index < largestCategory; index += 1) {
+    [
+      ['truth', truths[index]],
+      ['dare', dares[index]],
+    ].forEach(([type, prompt]) => {
+      if (prompt) {
+        capsules.push({
+          id: prompt.id,
+          type,
+          color: getPromptCapsuleColor(type, prompt.shadeIndex),
+        });
+      }
+    });
   }
 
-  return Array.from({ length: PROMPT_CAPSULE_COUNT }, (_, index) => {
-    let type = hasTruths ? 'truth' : 'dare';
-
-    if (hasTruths && hasDares) {
-      type = index % 2 === 0 ? 'truth' : 'dare';
-    }
-
-    return {
-      id: `prompt-${type}-${index}`,
-      type,
-      color: PROMPT_CAPSULE_COLORS[type],
-    };
-  });
+  return capsules;
 }
 
-function getLoadedMessage(hasTruths, hasDares) {
-  if (hasTruths && hasDares) {
-    return 'Truth and dare capsules are loaded.';
+function getLoadedMessage(truthCount, dareCount) {
+  const total = truthCount + dareCount;
+
+  if (total === 0) {
+    return 'No prompt capsules remain. Reload or upload a deck to play again.';
   }
 
-  return hasTruths ? 'Truth capsules are loaded.' : 'Dare capsules are loaded.';
+  if (truthCount > 0 && dareCount > 0) {
+    return `${total} capsules remain: ${truthCount} truths and ${dareCount} dares.`;
+  }
+
+  return truthCount > 0
+    ? `${truthCount} truth capsules remain.`
+    : `${dareCount} dare capsules remain.`;
 }
 
 export default function TruthOrDareMachine({
-  hasTruths,
-  hasDares,
+  truths,
+  dares,
   isDrawing,
   dropColor,
 }) {
-  const capsules = buildPromptCapsules(hasTruths, hasDares);
-
-  if (capsules.length === 0) {
-    return null;
-  }
+  const capsules = buildPromptCapsules(truths, dares);
+  const hasTruths = truths.length > 0;
+  const hasDares = dares.length > 0;
 
   return (
     <section
@@ -54,7 +57,7 @@ export default function TruthOrDareMachine({
       <div className="machine-marquee">
         <p className="eyebrow">Prompt machine</p>
         <h2 id="truth-dare-machine-title">Gashapon Draw</h2>
-        <p>{getLoadedMessage(hasTruths, hasDares)}</p>
+        <p>{getLoadedMessage(truths.length, dares.length)}</p>
       </div>
 
       <CapsuleGlobe
@@ -62,6 +65,7 @@ export default function TruthOrDareMachine({
         isDrawing={isDrawing}
         className="truth-dare-globe"
         dropColor={dropColor}
+        showAll
       />
 
       <div className="machine-tray">
@@ -77,13 +81,13 @@ export default function TruthOrDareMachine({
         {hasTruths ? (
           <span>
             <span className="legend-swatch legend-swatch--truth" aria-hidden="true" />
-            Truth
+            Truth · {truths.length}
           </span>
         ) : null}
         {hasDares ? (
           <span>
             <span className="legend-swatch legend-swatch--dare" aria-hidden="true" />
-            Dare
+            Dare · {dares.length}
           </span>
         ) : null}
       </div>

@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import { drawTruthOrDare } from '../lib/drawPrompt.js';
+import {
+  consumeDrawnPrompt,
+  drawTruthOrDare,
+  getPromptCapsuleColor,
+  parsePromptCsv,
+} from '../lib/drawPrompt.js';
 import PostDrawRevealOverlay from './PostDrawRevealOverlay.jsx';
 import PromptDeckUploader from './PromptDeckUploader.jsx';
-import PromptReveal from './PromptReveal.jsx';
 import TruthOrDareMachine from './TruthOrDareMachine.jsx';
 
 const emptyDeck = {
-  truthsFileName: '',
-  daresFileName: '',
+  fileName: '',
   truths: [],
   dares: [],
 };
 const DRAW_ANIMATION_MS = 4700;
-const PROMPT_DROP_COLORS = {
-  truth: 'var(--blue)',
-  dare: 'var(--coral)',
-};
+const DEFAULT_DECK_FILE_NAME = 'truthordare-deck.csv';
 
 function PromptReadySummary({ truthCount, dareCount, onEdit }) {
   return (
@@ -25,16 +25,16 @@ function PromptReadySummary({ truthCount, dareCount, onEdit }) {
     >
       <div className="section-heading">
         <p className="eyebrow">Prompt deck</p>
-        <h2 id="prompt-ready-title">Lists ready</h2>
+        <h2 id="prompt-ready-title">Capsules remaining</h2>
       </div>
 
       <div className="prompt-stats" aria-label="Ready prompt counts">
         <div>
-          <span>Truths</span>
+          <span>Truths left</span>
           <strong>{truthCount}</strong>
         </div>
         <div>
-          <span>Dares</span>
+          <span>Dares left</span>
           <strong>{dareCount}</strong>
         </div>
       </div>
@@ -48,7 +48,6 @@ function PromptReadySummary({ truthCount, dareCount, onEdit }) {
 
 export default function TruthOrDareMode() {
   const [deck, setDeck] = useState(emptyDeck);
-  const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const [isDrawing, setIsDrawing] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -68,6 +67,42 @@ export default function TruthOrDareMode() {
     };
   }, []);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadDefaultDeck() {
+      try {
+        const response = await fetch(
+          `${import.meta.env.BASE_URL}${DEFAULT_DECK_FILE_NAME}`,
+          { signal: controller.signal },
+        );
+
+        if (!response.ok) {
+          return;
+        }
+
+        const parsedDeck = parsePromptCsv(await response.text());
+        setDeck((currentDeck) => {
+          if (currentDeck.fileName) {
+            return currentDeck;
+          }
+
+          return {
+            fileName: DEFAULT_DECK_FILE_NAME,
+            ...parsedDeck,
+          };
+        });
+      } catch (loadError) {
+        if (loadError.name !== 'AbortError') {
+          // A missing or malformed optional deck simply leaves the uploader ready.
+        }
+      }
+    }
+
+    loadDefaultDeck();
+    return () => controller.abort();
+  }, []);
+
   function clearPendingDraw() {
     if (drawTimeoutRef.current) {
       window.clearTimeout(drawTimeoutRef.current);
@@ -82,7 +117,6 @@ export default function TruthOrDareMode() {
   function updateDeck(nextDeck) {
     clearPendingDraw();
     setDeck(nextDeck);
-    setResult(null);
     setError('');
     setIsReady(false);
   }
@@ -94,14 +128,12 @@ export default function TruthOrDareMode() {
     }
 
     clearPendingDraw();
-    setResult(null);
     setError('');
     setIsReady(true);
   }
 
   function editLists() {
     clearPendingDraw();
-    setResult(null);
     setError('');
     setIsReady(false);
   }
@@ -113,10 +145,14 @@ export default function TruthOrDareMode() {
 
     try {
       const nextResult = drawTruthOrDare(deck, choice);
+      const selectedColor = getPromptCapsuleColor(
+        nextResult.type,
+        nextResult.prompt.shadeIndex,
+      );
       clearPendingDraw();
       setError('');
-      setResult(null);
-      setDropColor(PROMPT_DROP_COLORS[nextResult.type]);
+      setDeck((currentDeck) => consumeDrawnPrompt(currentDeck, nextResult));
+      setDropColor(selectedColor);
       setIsDrawing(true);
 
       const delay = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -127,7 +163,7 @@ export default function TruthOrDareMode() {
           kind: 'prompt',
           type: nextResult.type,
           prompt: nextResult.prompt,
-          color: PROMPT_DROP_COLORS[nextResult.type],
+          color: selectedColor,
         });
         setIsDrawing(false);
         setDropColor(null);
@@ -143,13 +179,6 @@ export default function TruthOrDareMode() {
       return;
     }
 
-    if (postDrawReveal.kind === 'prompt') {
-      setResult({
-        type: postDrawReveal.type,
-        prompt: postDrawReveal.prompt,
-      });
-    }
-
     setPostDrawReveal(null);
   }
 
@@ -158,8 +187,8 @@ export default function TruthOrDareMode() {
       <div className="truth-dare-main">
         {isReady ? (
           <TruthOrDareMachine
-            hasTruths={hasTruths}
-            hasDares={hasDares}
+            truths={deck.truths}
+            dares={deck.dares}
             isDrawing={isDrawing}
             dropColor={dropColor}
           />
@@ -240,7 +269,6 @@ export default function TruthOrDareMode() {
         ) : null}
       </div>
 
-      {isReady ? <PromptReveal result={result} /> : null}
       {postDrawReveal ? (
         <PostDrawRevealOverlay
           reveal={postDrawReveal}

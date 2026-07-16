@@ -6,7 +6,7 @@ A cute retro browser toy for drawing random capsule prizes, revealing them with 
 
 Gachapon Simulator is a React application that recreates the feel of a capsule toy vending machine in the browser. Users interact with a virtual machine, perform randomized draws from a curated item pool, discover prizes of different rarities, and track their collection over time.
 
-The app can also operate in a Truth or Dare mode. In that mode, users upload their own truth and dare prompt lists, then use the same capsule-style reveal interaction to draw a prompt uniformly from the selected list.
+The app can also operate in a Truth or Dare mode. In that mode, users upload one CSV deck containing truths, dares, and their correct/incorrect outcome images. The app then uses the same capsule-style reveal interaction to draw a prompt uniformly from the available categories.
 
 The project is intended to be lightweight, tactile, and approachable. It should feel like a small arcade cabinet crossed with a collectible sticker album and party prompt machine: quick to understand, pleasant to repeat, and transparent about what can be drawn.
 
@@ -27,11 +27,13 @@ Current repository state: this repository now contains a Vite + React implementa
 ### Truth Or Dare Mode
 
 1. The user switches to Truth or Dare mode.
-2. The user uploads one `.txt` file of truths and one `.txt` file of dares.
-3. The app parses each non-empty line as one prompt.
+2. The app first tries `public/truthordare-deck.csv`; if it is unavailable, the user uploads one `.csv` deck. Referenced artwork lives in `public/images`.
+3. The app parses each row as a truth or dare with two mapped outcome images.
 4. The user chooses Surprise Me.
-5. The app reveals one prompt through the same capsule-style interaction.
-6. The prompt is selected uniformly from the relevant uploaded list.
+5. The app reveals one prompt through the capsule-style interaction.
+6. After the animation, the user marks the answer Correct or Incorrect.
+7. A full-screen, outcome-specific image transition plays and waits for input before returning to the machine.
+8. The extracted row is removed from the remaining deck and cannot be drawn again during that session.
 
 ## Current Implementation
 
@@ -42,7 +44,10 @@ Current repository state: this repository now contains a Vite + React implementa
 - Local collection persistence through `localStorage`.
 - Collection grid with discovered and undiscovered item states.
 - Draw stats, rarity counts, and reset progress control.
-- Truth or Dare mode with local `.txt` prompt uploads.
+- Truth or Dare mode with one local CSV deck upload and `public/images` artwork mapping.
+- Correct/incorrect prompt outcomes with distinct full-screen image transitions.
+- Consumable prompt pools with one visible capsule per remaining CSV row.
+- Distinct blue shades for truth capsules and red shades for dare capsules.
 - Uniform Truth, Dare, and Surprise Me prompt draws.
 - Responsive retro arcade styling.
 - Unit tests for draw, prompt parsing, and storage helpers.
@@ -81,9 +86,13 @@ Truth or Dare mode uses user-provided prompt lists instead of the predefined col
 
 Prompt upload rules:
 
-- Upload two plain text files: one for truths and one for dares.
-- Each non-empty line becomes one prompt.
-- Blank lines are ignored.
+- An optional `public/truthordare-deck.csv` is loaded automatically when Truth or Dare mode opens.
+- If the default deck is missing or invalid, the app quietly waits for a CSV upload.
+- Upload one CSV with the columns `Truth/dare`, `topic`, `description`, `image_name_1`, and `image_name_2`.
+- Set `Truth/dare` to `truth` or `dare` on every row.
+- `topic` is shown beside the Truth or Dare label during the prompt reveal.
+- Put the referenced image files in `public/images`; `image_name_1` is the Correct image and `image_name_2` is the Incorrect image.
+- CSV quoted fields, escaped quotes, commas, and line breaks in descriptions are supported.
 - Prompt order in the file does not affect draw probability.
 - Uploaded prompts are processed locally in the browser.
 
@@ -93,6 +102,10 @@ Truth or Dare draw behavior:
 2. If the user chooses Dare, the app uniformly draws one prompt from the uploaded dares list.
 3. If the user chooses Surprise Me, the app uniformly chooses between the available prompt categories, then uniformly draws one prompt from that category.
 4. If a category has no uploaded prompts, its draw control should be disabled or clearly unavailable.
+5. Correct and Incorrect become available only after the capsule-opening animation finishes.
+6. Either outcome waits for another click, tap, or key press before returning to the machine.
+7. A selected row is immediately removed from the in-memory pool, so every question can be extracted once.
+8. The globe and remaining counters update after every draw; reloading or uploading the deck starts a fresh pool.
 
 Truth or Dare mode should not use rarity weights. Every prompt within a selected category has the same probability.
 
@@ -148,8 +161,8 @@ External state libraries are not necessary for the first version.
 | `CollectionGrid` | Displays discovered and undiscovered items |
 | `ItemCard` | Renders a single prize card with rarity and count |
 | `TruthOrDareMode` | Hosts prompt upload, type selection, and prompt draw controls |
-| `PromptDeckUploader` | Parses uploaded `.txt` prompt files into truth and dare lists |
-| `PromptReveal` | Shows the selected truth or dare prompt |
+| `PromptDeckUploader` | Parses one uploaded CSV into truth and dare lists with outcome images |
+| `PostDrawRevealOverlay` | Shows the selected prompt and its correct/incorrect outcome flow |
 | `StatsPanel` | Summarizes draws, completion, and rarity totals |
 
 ## Testing Strategy
@@ -163,7 +176,7 @@ When the app is scaffolded, prioritize tests around behavior that can silently b
 - Local storage load/save handles missing and malformed data.
 - Reset progress clears only simulator data.
 - UI renders discovered and undiscovered states correctly.
-- Truth or Dare parsing ignores blank lines and preserves prompt text.
+- Truth or Dare CSV parsing supports quoted content and validates all required columns.
 - Truth or Dare draws select uniformly from the chosen prompt list.
 - Surprise Me chooses between available prompt categories before drawing uniformly.
 - Empty Truth or Dare categories disable or block their draw controls clearly.
@@ -219,10 +232,10 @@ Good item data includes:
 
 Good Truth or Dare prompt files include:
 
-- Plain `.txt` format.
-- One prompt per line.
-- Clear, readable prompts.
-- Separate files for truths and dares.
+- CSV format with the five required headers.
+- One prompt per row and `truth` or `dare` in the first column.
+- Clear, readable descriptions.
+- Existing filenames for both outcome images in `public/images`.
 
 Avoid item data that includes:
 

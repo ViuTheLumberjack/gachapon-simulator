@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 const SIMULATION_MS = 4000;
+const MAX_SIMULATED_CAPSULES = 36;
 const INITIAL_LAYOUT = [
   { x: 0.24, y: 0.76, angle: -10 },
   { x: 0.38, y: 0.82, angle: 8 },
@@ -10,11 +11,35 @@ const INITIAL_LAYOUT = [
   { x: 0.47, y: 0.69, angle: 6 },
 ];
 
+function getCapsuleLayout(index, count) {
+  if (count <= INITIAL_LAYOUT.length) {
+    return INITIAL_LAYOUT[index] ?? INITIAL_LAYOUT[0];
+  }
+
+  const columns = Math.ceil(Math.sqrt(count * 1.25));
+  const rows = Math.ceil(count / columns);
+  const row = Math.floor(index / columns);
+  const column = index % columns;
+  const capsulesInRow = Math.min(columns, count - row * columns);
+  const top = Math.max(0.28, 0.82 - (rows - 1) * 0.12);
+  const x = capsulesInRow === 1
+    ? 0.5
+    : 0.19 + (column / (capsulesInRow - 1)) * 0.62;
+  const y = rows === 1 ? 0.8 : top + (row / (rows - 1)) * (0.82 - top);
+
+  return {
+    x,
+    y,
+    angle: ((index * 29) % 34) - 17,
+  };
+}
+
 export default function CapsuleGlobe({
   capsules,
   isDrawing,
   className = '',
   dropColor,
+  showAll = false,
 }) {
   const globeRef = useRef(null);
   const rotorRef = useRef(null);
@@ -26,7 +51,10 @@ export default function CapsuleGlobe({
   ]
     .filter(Boolean)
     .join(' ');
-  const visibleCapsules = capsules.slice(0, 6);
+  const visibleCapsules = showAll ? capsules : capsules.slice(0, 6);
+  const dynamicCapsuleSize = showAll
+    ? Math.max(18, Math.min(54, Math.floor(180 / Math.sqrt(Math.max(visibleCapsules.length, 1)))))
+    : null;
   const fallingCapsuleColor = dropColor ?? visibleCapsules[0]?.color ?? 'var(--yellow)';
 
   useEffect(() => {
@@ -59,9 +87,10 @@ export default function CapsuleGlobe({
     const center = globeSize / 2;
     const particles = capsuleRefs.current
       .slice(0, visibleCapsules.length)
+      .slice(0, MAX_SIMULATED_CAPSULES)
       .filter(Boolean)
       .map((capsule, index) => {
-        const layout = INITIAL_LAYOUT[index] ?? INITIAL_LAYOUT[0];
+        const layout = getCapsuleLayout(index, visibleCapsules.length);
         const capsuleWidth = capsule.offsetWidth;
         const capsuleHeight = capsule.offsetHeight;
         const baseX = layout.x * globeSize;
@@ -222,14 +251,19 @@ export default function CapsuleGlobe({
   return (
     <div
       className={`capsule-globe-stage ${isDrawing ? 'is-drawing' : ''}`}
-      style={{ '--drop-capsule-color': fallingCapsuleColor }}
+      style={{
+        '--drop-capsule-color': fallingCapsuleColor,
+        '--dynamic-capsule-size': dynamicCapsuleSize
+          ? `${dynamicCapsuleSize}px`
+          : undefined,
+      }}
       aria-hidden="true"
     >
       <div className={globeClassName} ref={globeRef}>
         <div className="machine-globe__rotor" ref={rotorRef}>
           <span className="machine-globe__spinner" />
           {visibleCapsules.map((capsule, index) => {
-            const layout = INITIAL_LAYOUT[index] ?? INITIAL_LAYOUT[0];
+            const layout = getCapsuleLayout(index, visibleCapsules.length);
 
             return (
               <span
